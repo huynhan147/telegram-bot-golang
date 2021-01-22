@@ -20,6 +20,7 @@ func New() *echo.Echo {
 		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
 	}))
 	e.POST("/webhook", handler.WebHook)
+	e.GET("/send-message", handler.TestSend)
 	api := e.Group("/api")
 	{
 		api.GET("/get-me", handler.GetMe)
