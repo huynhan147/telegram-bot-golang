@@ -12,6 +12,9 @@ type Config struct {
 
 	TokenAPIBotTelegram string `mapstructure:"TokenAPIBotTelegram"`
 	URLAPIBotTelegram   string `mapstructure:"URLAPIBotTelegram"`
+
+	APIKeyWeather string `mapstructure:"API_KEY_WHEATHER"`
+	APIUrlWeather string `mapstructure:"API_URL_WHEATHER"`
 }
 
 // LoadConfig : load config from env
@@ -29,15 +32,3 @@ func LoadConfig(path string) (config Config, err error) {
 	err = viper.Unmarshal(&config)
 	return
 }
-
-// const (
-// 	// Config Mysql DB
-// 	USER     string = ""
-// 	PASSWORD string = ""
-// 	DB       string = ""
-// 	HOST     string = ""
-// 	PORT     string = ""
-// 	// Config telegram bot
-// 	TokenAPIBotTelegram string = "1380062376:AAH8GQDHg9OJgJ3qux6FgfO1WWNrDQ60-Oo"
-// 	URLAPIBotTelegram   string = "https://api.telegram.org/bot"
-// )
