@@ -19,27 +19,25 @@ type ResponseTeleGram struct {
 	ErrorCode   int    `json:"error_code"`
 }
 
-func Send(text string, chatId int64) {
+// Send : send message
+func Send(text string, chatID int64) {
 	config, err := config.LoadConfig("./")
-	urlApi := config.URLAPIBotTelegram + config.TokenAPIBotTelegram + "/sendMessage"
-
-	// params := models.ParamSendMessage{}
-	// params.Method = "sendMessage"
-	// params.ChatId = chatId
-	// params.Text = text
-	// params.ParseMode = "HTML"
-
-	// jsonData, err := json.Marshal(params)
-
+	urlAPI := config.URLAPIBotTelegram + config.TokenAPIBotTelegram + "/sendMessage"
 	if err != nil {
 		log.Fatal("can not load config: ", err)
 	}
+	strChatID := strconv.FormatInt(chatID, 10)
 
-	response, err := http.PostForm(urlApi, url.Values{
+	response, err := http.PostForm(urlAPI, url.Values{
 		"method":     {"sendMessage"},
-		"chat_id":    {strconv.FormatUint(chatId)},
+		"chat_id":    {strChatID},
 		"text":       {text},
 		"parse_mode": {"HTML"}})
+
+	if err != nil {
+		log.Fatal("Request Fail ", err)
+	}
+
 	defer response.Body.Close()
 
 	body, _ := ioutil.ReadAll(response.Body)
@@ -52,7 +50,10 @@ func Send(text string, chatId int64) {
 	if err1 != nil {
 		log.Fatal(err1)
 	}
-	fmt.Printf("Error : %+v\n", dataResponse.Description)
+
+	if !dataResponse.Ok {
+		fmt.Printf("Error : %+v\n", dataResponse.Description)
+	}
 
 	// var res map[string]interface{}
 
@@ -63,7 +64,7 @@ func Send(text string, chatId int64) {
 
 	// // resp := ResponseTeleGram{}
 	// // err = json.Unmarshal(body, &resp)
-	log.Printf("value: %+v", string(chatId))
+	log.Printf("value: %+v", dataResponse)
 }
 
 func TestSend(c echo.Context) error {
